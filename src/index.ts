@@ -16,7 +16,16 @@ const todos: Todo [] = [
     new Todo('Swisha Mrks för hjälp')
 ]
 
-app.get('/todos', (_: Request, res: Response) => {
+app.get('/todos', (req: Request, res: Response) => {
+const search = req.query.search
+const sort = req.query.sort
+
+let filtredTodos = todos
+
+if (search) {
+    filtredTodos = filtredTodos.filter((t) => t.content.includes(search.toString()))
+}
+
     res.json(todos)
 })
 
