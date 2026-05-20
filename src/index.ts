@@ -11,6 +11,9 @@ app.get("/ping", (_: Request, res: Response) => {
 });
 
 const todos: Todo[] = [
+  new Todo("AAA"),
+  new Todo("BBB"),
+  new Todo("CCC"),
   new Todo("Starta node server"),
   new Todo("Felsöka node server"),
   new Todo("Swisha Mrks för hjälp"),
@@ -40,6 +43,13 @@ app.get("/todos", (req: Request, res: Response) => {
 
   res.json(filtredTodos);
 });
+
+app.get('/todos/:id', (req: Request, res: Response) => {
+const id = req.params.id as string
+const todo = todos.find((t) => t.id === parseInt(id))
+
+res.json({todo})
+})
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
