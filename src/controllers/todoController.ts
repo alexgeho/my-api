@@ -106,5 +106,5 @@ export const deleteTodo = (req: Request, res: Response) => {
     message: "Todo deleted",
     data: deletedTodo,
   });
-  
+
 };
