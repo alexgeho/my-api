@@ -34,7 +34,11 @@ export const fetchAllTodos = (req: Request, res: Response) => {
 
     res.json(filtredTodos);
   } catch (error) {
-    res.status(500).json(error.message);
+    if (error instanceof Error) {
+    res.status(500).json({
+      error: error.message
+    });
+    }
   }
 };
 
