@@ -2,13 +2,17 @@ import type { Request, Response } from "express";
 import express from "express";
 import cors from 'cors'
 import todoRouter from  './routes/todo.js'
+import postRouter from  './routes/post.js'
 
 const app = express();
 const PORT = 5001;
 
 app.use(express.json())
 app.use(cors())
+
 app.use('/todos', todoRouter)
+app.use('/posts', postRouter)
+
 
 
 app.get("/ping", (_: Request, res: Response) => {

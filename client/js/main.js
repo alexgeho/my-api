@@ -6,7 +6,7 @@ const sort = document.getElementById("sort");
 
 /* RENDER TODOS TO DOM */
 
-function renderTodos(data) {
+function renderEntities(data) {
   todoElement.innerHTML = data
     .map(
       (todo) => `
@@ -22,13 +22,13 @@ function renderTodos(data) {
 }
 
 /* Fetch todos from API */
-async function fetchTodos(query = "") {
+async function fetchEntities(query = "") {
   try {
-    const response = await fetch(`http://localhost:5001/todos${query}`);
+    const response = await fetch(`http://localhost:5001/posts${query}`);
 
     const data = await response.json();
 
-    renderTodos(data);
+    renderEntities(data);
   } catch (error) {
     todoElement.innerHTML = "Ops something went wrong. Please try again later";
 
@@ -46,7 +46,7 @@ function submitBtn(event) {
 
   const reqQuery = `?search=${searchValue}&sort=${sortValue}`;
 
-  fetchTodos(reqQuery);
+  fetchEntities(reqQuery);
 }
 
 /* Event listener */
@@ -55,4 +55,4 @@ todoForm.addEventListener("submit", submitBtn);
 
 /* Initial fetch */
 
-fetchTodos();
+fetchEntities();
