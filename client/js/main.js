@@ -1,55 +1,58 @@
-const todoElement =
-  document.getElementById("todos");
+const todoElement = document.getElementById("todos");
 
-const fetchTodos = async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:5001/todos"
-    );
+const todoForm = document.getElementById("todo-form");
+const search = document.getElementById("search");
+const sort = document.getElementById("sort");
 
-    const data = await response.json();
+/* RENDER TODOS TO DOM */
 
-    todoElement.innerHTML = data
-      .map((todo) => `
+function renderTodos(data) {
+  todoElement.innerHTML = data
+    .map(
+      (todo) => `
         <div>
           <p>
             <span>${todo.date}</span>
             <span>${todo.content}</span>
           </p>
         </div>
-      `)
-      .join("");
+      `,
+    )
+    .join("");
+}
+
+/* Fetch todos from API */
+async function fetchTodos(query = "") {
+  try {
+    const response = await fetch(`http://localhost:5001/todos${query}`);
+
+    const data = await response.json();
+
+    renderTodos(data);
   } catch (error) {
-    todoElement.innerHTML =
-      "Ops something went wrong. Please try again later";
+    todoElement.innerHTML = "Ops something went wrong. Please try again later";
 
     console.log(error);
   }
-};
+}
 
-fetchTodos();
-
-/* SEND REQ TO API */
-
-const todoForm = document.getElementById("todo-form");
-const search = document.getElementById("search");
-const sort = document.getElementById("sort");
-const submit = document.getElementById("submit");
-
-
-todoForm.addEventListener('submit', submitBtn)
+/* Handle form submit */
 
 function submitBtn(event) {
+  event.preventDefault();
 
-event.preventDefault();
+  const searchValue = search.value;
+  const sortValue = sort.value;
 
+  const reqQuery = `?search=${searchValue}&sort=${sortValue}`;
 
-
-const searchVaule = search.value
-const sortVaule = sort.value
-
-const reqQuery = `?search=${searchVaule}&sort=${sortVaule}`; 
-
-fetch(`http://localhost:5001/todos${reqQuery}`);
-
+  fetchTodos(reqQuery);
 }
+
+/* Event listener */
+
+todoForm.addEventListener("submit", submitBtn);
+
+/* Initial fetch */
+
+fetchTodos();
