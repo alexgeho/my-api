@@ -29,7 +29,27 @@ const fetchTodos = async () => {
 
 fetchTodos();
 
-const search =
-  document.getElementById("search");
+/* SEND REQ TO API */
 
-  
+const todoForm = document.getElementById("todo-form");
+const search = document.getElementById("search");
+const sort = document.getElementById("sort");
+const submit = document.getElementById("submit");
+
+
+todoForm.addEventListener('submit', submitBtn)
+
+function submitBtn(event) {
+
+event.preventDefault();
+
+
+
+const searchVaule = search.value
+const sortVaule = sort.value
+
+const reqQuery = `?search=${searchVaule}&sort=${sortVaule}`; 
+
+fetch(`http://localhost:5001/todos${reqQuery}`);
+
+}
