@@ -28,3 +28,8 @@ const fetchTodos = async () => {
 };
 
 fetchTodos();
+
+const search =
+  document.getElementById("search");
+
+  
