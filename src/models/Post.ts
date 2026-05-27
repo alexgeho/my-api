@@ -9,7 +9,7 @@ export class Post {
     this.id = Math.round(Math.random() * 1000);
     this.title = title;
     this.author = author;
-    this.content = content.slice(0, 100);
+    this.content = content;
     this.date = new Date().toString();
   }
 }

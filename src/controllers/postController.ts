@@ -5,7 +5,7 @@ import { Post } from "../models/Post.js";
 export const posts: Post [] = [
 new Post('titleTest', 'authorTest', 'contentTest'),
 new Post('2titleTest', '2authorTest', '2contentTest'),
-new Post('3titleTest', '3authorTest', '3contentTest'),
+new Post('3titleTest', '3authorTest', 'Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw'),
 ];
 
 /* fetchAllPosts */
