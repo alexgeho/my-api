@@ -3,13 +3,16 @@ import { Post } from "../models/Post.js";
 
 
 export const posts: Post [] = [
-new Post('titleTest', 'authorTest', 'contentTest'),
-new Post('2titleTest', '2authorTest', '2contentTest'),
+new Post('Story of my life', 'Alex Bitw', 'content comming soon'),
+new Post('Here bi title 2', 'author otw', 'content bit delay'),
 new Post('3titleTest', '3authorTest', 'Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw Bitaw'),
 ];
 
 /* fetchAllPosts */
+
 export const fetchAllPosts = (req: Request, res: Response) => {
+
+  
   const search = req.query.search;
   const sort = req.query.sort;
   let filtredPosts = posts;

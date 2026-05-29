@@ -9,21 +9,20 @@ const sort = document.getElementById("sort");
 function renderEntities(data) {
   todoElement.innerHTML = data
     .map(
-      (bitaw) => `
+      (post) => `
         <div>
           <p class="post-card">
-            <span>${bitaw.date}</span>
-             <span>${bitaw.title}</span>
-            <span>${bitaw.author}</span>
+             <span>${post.title}</span>
+            <span>${post.author}</span>
            <span>
   ${
     bitaw.content.length > 100
-      ? `${bitaw.content.slice(0, 100)}...`
-      : bitaw.content
+      ? `${post.content.slice(0, 100)}...`
+      : post.content
   }
 </span>
 
-${bitaw.content.length > 100 ? `<a href="#">Read more...</a>` : ""}
+${post.content.length > 100 ? `<a href="post.html?id=${post.id}">Read more...</a>` : ""}
            
           </p>
         </div>
