@@ -45,3 +45,11 @@ export const fetchAllPosts = (req: Request, res: Response) => {
 }
 
 
+
+
+export const fetchPost = (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const post = posts.find((p) => p.id === parseInt(id));
+
+  res.json( post );
+};

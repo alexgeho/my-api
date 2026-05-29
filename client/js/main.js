@@ -16,7 +16,7 @@ function renderEntities(data) {
             <span>${post.author}</span>
            <span>
   ${
-    bitaw.content.length > 100
+    post.content.length > 100
       ? `${post.content.slice(0, 100)}...`
       : post.content
   }
