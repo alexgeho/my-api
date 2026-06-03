@@ -61,7 +61,7 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
   try  {
    
    const [results, fields] = await db.query(
-    'SELECT * FROM `defaultdb.table` WHERE `name` = "Page" AND `age` > 45'
+    'SELECT * FROM `defaultdb.table` WHERE `fname` = "Page" AND `age` > 45'
   );
   res.json(results)
   
