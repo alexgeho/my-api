@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { Todo } from "../models/Todo.js";
 import { Post } from "../models/Post.js";
+import { db } from "../config/db.js";
 
 
 export const todos: Todo[] = [
@@ -11,6 +12,9 @@ export const todos: Todo[] = [
   new Todo("Felsöka node server"),
   new Todo("Swisha Mrks för hjälp"),
 ];
+
+
+
 
 export const posts: Post [] = [
 new Post('titleTest', 'authorTest', 'contentTest'),
@@ -52,8 +56,20 @@ export const fetchAllPosts = (req: Request, res: Response) => {
 }
 
 /* fetchAllTodos */
-export const fetchAllTodos = (req: Request, res: Response) => {
-  const search = req.query.search;
+export const fetchAllTodos = async (req: Request, res: Response) => {
+
+  try  {
+   
+   const [results, fields] = await db.query(
+    'SELECT * FROM `defaultdb.table` WHERE `name` = "Page" AND `age` > 45'
+  );
+  res.json(results)
+  
+} catch (error) {
+      res.status(500).json({ error: error });
+  } 
+  
+  /* const search = req.query.search;
   const sort = req.query.sort;
   let filtredTodos = todos;
 
@@ -81,11 +97,12 @@ export const fetchAllTodos = (req: Request, res: Response) => {
       error: error.message
     });
     }
-  }
+  } */
 };
 
-export const fetchTodo = (req: Request, res: Response) => {
-  const id = req.params.id as string;
+export const fetchTodo = async (req: Request, res: Response) => {
+ 
+const id = req.params.id as string;
   const todo = todos.find((t) => t.id === parseInt(id));
 
   res.json({ todo });
