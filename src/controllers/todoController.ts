@@ -3,23 +3,10 @@ import { Todo } from "../models/Todo.js";
 import { Post } from "../models/Post.js";
 import { db } from "../config/db.js";
 
-
-export const todos: Todo[] = [
-  new Todo("AAA"),
-  new Todo("BBB"),
-  new Todo("CCC"),
-  new Todo("Starta node server"),
-  new Todo("Felsöka node server"),
-  new Todo("Swisha Mrks för hjälp"),
-];
-
-
-
-
-export const posts: Post [] = [
-new Post('titleTest', 'authorTest', 'contentTest'),
-new Post('2titleTest', '2authorTest', '2contentTest'),
-new Post('3titleTest', '3authorTest', '3contentTest'),
+export const posts: Post[] = [
+  new Post("titleTest", "authorTest", "contentTest"),
+  new Post("2titleTest", "2authorTest", "2contentTest"),
+  new Post("3titleTest", "3authorTest", "3contentTest"),
 ];
 
 /* fetchAllPosts */
@@ -48,27 +35,23 @@ export const fetchAllPosts = (req: Request, res: Response) => {
     res.json(filtredPosts);
   } catch (error) {
     if (error instanceof Error) {
-    res.status(500).json({
-      error: error.message
-    });
+      res.status(500).json({
+        error: error.message,
+      });
     }
   }
-}
+};
 
 /* fetchAllTodos */
 export const fetchAllTodos = async (req: Request, res: Response) => {
+  try {
+    const [results] = await db.query("SELECT * FROM defaultdb.table");
+    res.json(results);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    res.status(500).json({ error: error });
+  }
 
-  try  {
-   
-   const [results, fields] = await db.query(
-    'SELECT * FROM `defaultdb.table` WHERE `fname` = "Page" AND `age` > 45'
-  );
-  res.json(results)
-  
-} catch (error) {
-      res.status(500).json({ error: error });
-  } 
-  
   /* const search = req.query.search;
   const sort = req.query.sort;
   let filtredTodos = todos;
@@ -101,9 +84,18 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
 };
 
 export const fetchTodo = async (req: Request, res: Response) => {
- 
-const id = req.params.id as string;
-  const todo = todos.find((t) => t.id === parseInt(id));
+
+  const id = req.params.id as string;
+
+  try {
+    const [results] = await db.query("SELECT * FROM bitaws WHERE id = ?", [id]);
+
+    res.json(results);
+
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    res.status(500).json({ error: error });
+  }
 
   res.json({ todo });
 };
@@ -169,5 +161,4 @@ export const deleteTodo = (req: Request, res: Response) => {
     message: "Todo deleted",
     data: deletedTodo,
   });
-
 };
