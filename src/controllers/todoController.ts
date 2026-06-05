@@ -84,33 +84,31 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
 };
 
 export const fetchTodo = async (req: Request, res: Response) => {
-
   const id = req.params.id as string;
 
   try {
     const [results] = await db.query("SELECT * FROM bitaws WHERE id = ?", [id]);
 
     res.json(results);
-
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     res.status(500).json({ error: error });
   }
-
-  res.json({ todo });
 };
 
-export const createTodo = (req: Request, res: Response) => {
+export const createTodo = async (req: Request, res: Response) => {
   try {
-    const content = req.body.content;
+    const { fname, lname } = req.body;
 
-    if (content === undefined) {
-      res.status(400).json({ error: "Content is required" });
+    if (fname === undefined || lname === undefined) {
+      res.status(400).json({ error: "Values are required" });
       return;
     }
 
-    const newTodo = new Todo(content);
-    todos.push(newTodo);
+    const [results] = await db.query(
+      "INSERT INTO bitaws (fname, lname) VALUES (?, ?)",
+      [fname, lname],
+    );
 
     res.status(201).json({ message: "Todo created" });
   } catch (error) {
@@ -141,24 +139,15 @@ export const patchTodo = (req: Request, res: Response) => {
   res.json({ message: "Todo update", date: todo });
 };
 
-export const deleteTodo = (req: Request, res: Response) => {
-  const id = req.params.id;
+export const deleteTodo = async (req: Request, res: Response) => {
+  const id = req.params.id as string;
 
-  if (!id) {
-    res.status(404).json({ error: "Todo not found" });
-    return;
+  try {
+    const [results] = await db.query("DELETE FROM bitaws WHERE id = ?", [id]);
+
+    res.json(results);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    res.status(500).json({ error: error });
   }
-
-  const todoIndex = todos.findIndex(
-    (t) => t.id === parseInt(req.params.id as string),
-  );
-
-  const deletedTodo = todos[todoIndex];
-
-  todos.splice(todoIndex, 1);
-
-  res.json({
-    message: "Todo deleted",
-    data: deletedTodo,
-  });
 };
