@@ -8,7 +8,7 @@ export const fetchSubtask = async (req: Request, res: Response) => {
   const id = req.params.id as string;
 
   try {
-    const [results] = await db.query("SELECT * FROM bitaws WHERE id = ?", [id]);
+    const [results] = await db.query("SELECT * FROM subtasks WHERE id = ?", [id]);
 
     res.json(results);
   } catch (error: unknown) {
@@ -19,16 +19,16 @@ export const fetchSubtask = async (req: Request, res: Response) => {
 
 export const createSubtask = async (req: Request, res: Response) => {
   try {
-    const { fname, lname } = req.body;
+    const { content, done } = req.body;
 
-    if (fname === undefined || lname === undefined) {
+    if (content === undefined || done === undefined) {
       res.status(400).json({ error: "Values are required" });
       return;
     }
 
     const [results] = await db.query(
-      "INSERT INTO bitaws (fname, lname) VALUES (?, ?)",
-      [fname, lname],
+      "INSERT INTO subtasks (content, done) VALUES (?, ?)",
+      [content, done],
     );
 
     res.status(201).json({ message: "Todo created" });
@@ -64,7 +64,7 @@ export const deleteSubtask = async (req: Request, res: Response) => {
   const id = req.params.id as string;
 
   try {
-    const [results] = await db.query("DELETE FROM bitaws WHERE id = ?", [id]);
+    const [results] = await db.query("DELETE FROM subtasks WHERE id = ?", [id]);
 
     res.json(results);
   } catch (error: unknown) {
