@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import todoRouter from "./routes/todo.js";
 import postRouter from "./routes/post.js";
+import subtaskRouter from "./routes/subtasks.js";
 import { connectToDatabase } from "./config/db.js";
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(cors()); // This makes the Express server except request from other doma
 
 app.use("/todos", todoRouter);
 app.use("/posts", postRouter);
+app.use("/subtasks", subtaskRouter);
 
 app.get("/ping", (_: Request, res: Response) => {
   res.send("Helo world");
