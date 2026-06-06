@@ -19,19 +19,19 @@ export const fetchSubtask = async (req: Request, res: Response) => {
 
 export const createSubtask = async (req: Request, res: Response) => {
   try {
-    const { content, done } = req.body;
+    const { content, todoId } = req.body;
 
-    if (content === undefined || done === undefined) {
+    if (content === undefined || todoId === undefined) {
       res.status(400).json({ error: "Values are required" });
       return;
     }
 
     const [results] = await db.query(
-      "INSERT INTO subtasks (content, done) VALUES (?, ?)",
-      [content, done],
+      "INSERT INTO subtasks (content, todoId) VALUES (?, ?)",
+      [content, todoId],
     );
 
-    res.status(201).json({ message: "Todo created" });
+    res.status(201).json({ message: "created subTask" });
   } catch (error) {
     console.log("Error: ", error);
     res.json({ error: error });
@@ -44,20 +44,20 @@ export const patchSubtask = (req: Request, res: Response) => {
   const { content, done } = req.body;
 
   if (content === undefined || done === undefined) {
-    res.status(400).json({ error: "Todo not found" });
+    res.status(400).json({ error: "SubTask not found" });
     return;
   }
 
   const todo = todos.find((t) => t.id === parseInt(req.params.id as string));
   if (!todo) {
-    res.status(404).json({ error: "Todo not found" });
+    res.status(404).json({ error: "SubTask not found" });
     return;
   }
 
   todo.content = content;
   todo.done = done;
 
-  res.json({ message: "Todo update", date: todo });
+  res.json({ message: "SubTask update", date: todo });
 };
 
 export const deleteSubtask = async (req: Request, res: Response) => {
