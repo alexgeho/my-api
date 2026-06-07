@@ -44,18 +44,19 @@ export const fetchAllPosts = (req: Request, res: Response) => {
 
 /* fetchAllTodos */
 export const fetchAllTodos = async (req: Request, res: Response) => {
-
-  const search = req.query.search
+  const search = req.query.search;
 
   try {
-
-    let sql = `SELECT * FROM todos`
+    let sql = "SELECT * FROM todos";
+    const params: string[] = [];
 
     if (search) {
-      sql += ` WHERE content LIKE '%${search}%'`
+      sql += " WHERE content LIKE ?";
+      params.push(`%${search}%`);
     }
 
-    const [results] = await db.query(sql);
+    const [results] = await db.query(sql, params);
+    ƒ;
 
     res.json(results);
   } catch (error: unknown) {
