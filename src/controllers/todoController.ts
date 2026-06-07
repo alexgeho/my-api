@@ -44,8 +44,19 @@ export const fetchAllPosts = (req: Request, res: Response) => {
 
 /* fetchAllTodos */
 export const fetchAllTodos = async (req: Request, res: Response) => {
+
+  const search = req.query.search
+
   try {
-    const [results] = await db.query("SELECT * FROM defaultdb.table");
+
+    let sql = `SELECT * FROM todos`
+
+    if (search) {
+      sql += ` WHERE content LIKE '%${search}%'`
+    }
+
+    const [results] = await db.query(sql);
+
     res.json(results);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
