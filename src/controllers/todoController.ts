@@ -56,11 +56,13 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
       params.push(`%${search}%`);
     }
 
-    if (sort && sort === "asc") {
-      sql += ` ORDER BY content ASC`;
-    } else if (sort && sort === "desc"){
-      sql += ` ORDER BY content DESC`;
-    }
+    if (sort) {
+      sql += sort === 'asc'
+      ? ` ORDER BY content ASC`
+      : ` ORDER BY content DESC`
+    } 
+
+
 
     const [results] = await db.query(sql, params);
 
