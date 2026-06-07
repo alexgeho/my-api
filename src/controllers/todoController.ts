@@ -45,6 +45,7 @@ export const fetchAllPosts = (req: Request, res: Response) => {
 /* fetchAllTodos */
 export const fetchAllTodos = async (req: Request, res: Response) => {
   const search = req.query.search;
+  const sort = req.query.sort;
 
   try {
     let sql = "SELECT * FROM todos";
@@ -55,8 +56,13 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
       params.push(`%${search}%`);
     }
 
+    if (sort && sort === "asc") {
+      sql += ` ORDER BY content ASC`;
+    } else {
+      sql += ` ORDER BY content DESC`;
+    }
+
     const [results] = await db.query(sql, params);
-    ƒ;
 
     res.json(results);
   } catch (error: unknown) {
