@@ -58,7 +58,7 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
 
     if (sort && sort === "asc") {
       sql += ` ORDER BY content ASC`;
-    } else {
+    } else if (sort && sort === "desc"){
       sql += ` ORDER BY content DESC`;
     }
 
