@@ -87,9 +87,51 @@ export const fetchTodo = async (req: Request, res: Response) => {
   const id = req.params.id as string;
 
   try {
-    const [results] = await db.query("SELECT * FROM bitaws WHERE id = ?", [id]);
+    const sql = `SELECT
+    todos.id AS todo_id,
+    todos.content AS todo_content,
+    todos.done AS todo_done,
+    todos.created_at AS todo_created_at,
 
-    res.json(results);
+    subtasks.id AS subtask_id,
+    subtasks.todo_id AS subtask_todo_id,
+    subtasks.content AS subtask_content,
+    subtasks.done AS subtask_done,
+    subtasks.created_at AS subtask_created_at
+
+    FROM todos
+    LEFT JOIN subtasks
+    ON todos.id = subtasks.todo_id
+
+    WHERE todos.id = ?;`;
+
+    const [results] = await db.query(sql, [id]);
+
+    const rows = results as any[];
+
+    const todo = (rows as any[])[0];
+
+    let formattedTodo = {
+      id: todo.todo_id,
+      content: todo.todo_content,
+      done: todo.todo_done,
+      created_at: todo.todo_created_at,
+      subtasks: [] as any[],
+    };
+
+    for (const row of rows) {
+      if (row.subtask_id) {
+        formattedTodo.subtasks.push({
+          id: row.subtask_id,
+          todo_id: row.subtask_todo_id,
+          content: row.subtask_content,
+          done: row.subtask_done,
+          created_at: row.subtask_created_at,
+        });
+      }
+    }
+
+    res.json(formattedTodo);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     res.status(500).json({ error: error });
@@ -105,10 +147,11 @@ export const createTodo = async (req: Request, res: Response) => {
       return;
     }
 
-    const [results] = await db.query(
-      "INSERT INTO bitaws (fname, lname) VALUES (?, ?)",
-      [fname, lname],
-    );
+    const sql = `
+    INSERT INTO bitaws (fname, lname) VALUES (?, ?)
+    `;
+
+    const [results] = await db.query(sql, [fname, lname]);
 
     res.status(201).json({ message: "Todo created" });
   } catch (error) {
@@ -119,7 +162,7 @@ export const createTodo = async (req: Request, res: Response) => {
   }
 };
 
-export const patchTodo = (req: Request, res: Response) => {
+/* export const patchTodo = (req: Request, res: Response) => {
   const { content, done } = req.body;
 
   if (content === undefined || done === undefined) {
@@ -137,7 +180,7 @@ export const patchTodo = (req: Request, res: Response) => {
   todo.done = done;
 
   res.json({ message: "Todo update", date: todo });
-};
+}; */
 
 export const deleteTodo = async (req: Request, res: Response) => {
   const id = req.params.id as string;

@@ -29,7 +29,8 @@ export const createSubtask = async (req: Request, res: Response) => {
 
     const [results] = await db.query(sql, [content, todoId]);
 
-    res.status(201).json({ message: "created subTask" });
+    res.status(201).json({ message: "created subTask", results });
+
   } catch (error) {
     console.log("Error: ", error);
     res.json({ error: error });
