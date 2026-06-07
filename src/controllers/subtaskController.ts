@@ -1,14 +1,13 @@
 import type { Request, Response } from "express";
 import { db } from "../config/db.js";
 
-
-
-
 export const fetchSubtask = async (req: Request, res: Response) => {
   const id = req.params.id as string;
 
   try {
-    const [results] = await db.query("SELECT * FROM subtasks WHERE id = ?", [id]);
+    const [results] = await db.query("SELECT * FROM subtasks WHERE id = ?", [
+      id,
+    ]);
 
     res.json(results);
   } catch (error: unknown) {
@@ -26,10 +25,9 @@ export const createSubtask = async (req: Request, res: Response) => {
       return;
     }
 
-    const [results] = await db.query(
-      "INSERT INTO subtasks (content, todoId) VALUES (?, ?)",
-      [content, todoId],
-    );
+    const sql = `INSERT INTO subtasks (content, todo_id) VALUES (?, ?)`;
+
+    const [results] = await db.query(sql, [content, todoId]);
 
     res.status(201).json({ message: "created subTask" });
   } catch (error) {
@@ -40,24 +38,26 @@ export const createSubtask = async (req: Request, res: Response) => {
   }
 };
 
-export const patchSubtask = (req: Request, res: Response) => {
-  const { content, done } = req.body;
+export const patchSubtask = async (req: Request, res: Response) => {
+  const {content} = req.body
+  const {id} = req.params
 
-  if (content === undefined || done === undefined) {
+  if (content === undefined) {
     res.status(400).json({ error: "SubTask not found" });
     return;
   }
 
-  const todo = todos.find((t) => t.id === parseInt(req.params.id as string));
-  if (!todo) {
-    res.status(404).json({ error: "SubTask not found" });
-    return;
-  }
+  const sql = `
+    UPDATE subtasks
+    SET content = ?
+    WHERE id = ?;
+  `;
 
-  todo.content = content;
-  todo.done = done;
+    const [results] = await db.query(sql, [content, id]);
 
-  res.json({ message: "SubTask update", date: todo });
+
+
+  res.json({ message: "SubTask update" });
 };
 
 export const deleteSubtask = async (req: Request, res: Response) => {
