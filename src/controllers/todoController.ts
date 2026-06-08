@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { Todo } from "../models/Todo.js";
 import { Post } from "../models/Post.js";
 import { db } from "../config/db.js";
+import type { ITodoDBResponse } from "../models/ITodoDBResponse.js";
 
 export const posts: Post[] = [
   new Post("titleTest", "authorTest", "contentTest"),
@@ -57,12 +58,9 @@ export const fetchAllTodos = async (req: Request, res: Response) => {
     }
 
     if (sort) {
-      sql += sort === 'asc'
-      ? ` ORDER BY content ASC`
-      : ` ORDER BY content DESC`
-    } 
-
-
+      sql +=
+        sort === "asc" ? ` ORDER BY content ASC` : ` ORDER BY content DESC`;
+    }
 
     const [results] = await db.query(sql, params);
 
@@ -125,23 +123,15 @@ export const fetchTodo = async (req: Request, res: Response) => {
 
     WHERE todos.id = ?;`;
 
-    const [results] = await db.query(sql, [id]);
+    const [results] = await db.query<ITodoDBResponse[]>(sql, [id]);
 
-    const rows = results as any[];
+    const todo = results[0];
 
-    const todo = (rows as any[])[0];
+    const subtasks = [];
 
-    let formattedTodo = {
-      id: todo.todo_id,
-      content: todo.todo_content,
-      done: todo.todo_done,
-      created_at: todo.todo_created_at,
-      subtasks: [] as any[],
-    };
-
-    for (const row of rows) {
+    for (const row of results) {
       if (row.subtask_id) {
-        formattedTodo.subtasks.push({
+        subtasks.push({
           id: row.subtask_id,
           todo_id: row.subtask_todo_id,
           content: row.subtask_content,
@@ -150,6 +140,14 @@ export const fetchTodo = async (req: Request, res: Response) => {
         });
       }
     }
+
+    let formattedTodo = {
+      id: todo?.todo_id,
+      content: todo?.todo_content,
+      done: todo?.todo_done,
+      created_at: todo?.todo_created_at,
+      subtasks,
+    };
 
     res.json(formattedTodo);
   } catch (error: unknown) {
