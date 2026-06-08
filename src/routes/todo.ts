@@ -4,6 +4,7 @@ import {
  fetchTodo,
  createTodo,
  deleteTodo,
+ patchTodo,
  
 } from "../controllers/todoController.js"
 
@@ -16,7 +17,7 @@ router.get('/:id', fetchTodo);
 
 router.post("/", createTodo);
 
-/* router.patch("/:id", patchTodo); */
+router.patch("/:id", patchTodo);
 
 router.delete("/:id", deleteTodo);
 

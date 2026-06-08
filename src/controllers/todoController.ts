@@ -180,7 +180,9 @@ export const createTodo = async (req: Request, res: Response) => {
   }
 };
 
-/* export const patchTodo = (req: Request, res: Response) => {
+export const patchTodo = async (req: Request, res: Response) => {
+
+  const id = req.params.id
   const { content, done } = req.body;
 
   if (content === undefined || done === undefined) {
@@ -188,17 +190,17 @@ export const createTodo = async (req: Request, res: Response) => {
     return;
   }
 
-  const todo = todos.find((t) => t.id === parseInt(req.params.id as string));
-  if (!todo) {
-    res.status(404).json({ error: "Todo not found" });
-    return;
-  }
+  const sql = `
+  UPDATE todos
+  SET content = ?, done = ?
+  WHERE id = ?
+  `
+  const params = [content, done, id]
 
-  todo.content = content;
-  todo.done = done;
+  const [result] = await db.query(sql, params)
 
-  res.json({ message: "Todo update", date: todo });
-}; */
+  res.json({ message: "Todo update" });
+};
 
 export const deleteTodo = async (req: Request, res: Response) => {
   const id = req.params.id as string;
